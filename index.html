@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Encurtador de Links - Portfólio QA</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; background-color: #f4f4f9; }
+        .container { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: inline-block; }
+        input { padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #218838; }
+        #resultado { margin-top: 20px; font-size: 1.2em; font-weight: bold; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Encurtador de Links</h1>
+        <p>Insira uma URL longa para gerar o código curto</p>
+        <input type="text" id="link-original" placeholder="https://www.exemplo.com">
+        <button onclick="encurtar()">Encurtar</button>
+
+        <p id="resultado"></p>
+    </div>
+
+    <script>
+        async function encurtar() {
+            const url = document.getElementById('link-original').value;
+            const resultado = document.getElementById('resultado');
+
+            // Simula o Postman nos bastidores
+            const resposta = await fetch('http://127.0.0.1:8000/encurtar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url_original: url })
+            });
+
+            if (resposta.ok) {
+                const dados = await resposta.json();
+                resultado.innerHTML = `Link gerado: <a href="${dados.url_curta}" target="_blank">${dados.url_curta}</a>`;
+            } else {
+                resultado.style.color = "red";
+                resultado.innerText = "Erro 422: Verifique se o formato da URL está correto.";
+            }
+        }
+    </script>
+</body>
+</html>

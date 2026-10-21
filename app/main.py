@@ -1,3 +1,4 @@
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI, Depends
 from sqlmodel import SQLModel, Field, Session
 import random
@@ -23,6 +24,14 @@ class LinkRequisicao(SQLModel):
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Permite que qualquer página HTML acesse a API
+    allow_credentials=True,
+    allow_methods=["*"], # Permite POST, GET, etc.
+    allow_headers=["*"],
+)
 
 
 # 3. Criar o banco de dados assim que a API ligar
